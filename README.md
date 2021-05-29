@@ -1,7 +1,7 @@
 # Hello-building-editor
 
 Repo to try building-editor.
-Try [here](https://hiron.dev/helllo-building-editor)
+Try [here](https://hiron.dev/hello-building-editor/)
 
 
 Thanks baues.
