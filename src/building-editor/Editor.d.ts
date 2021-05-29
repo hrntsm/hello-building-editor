@@ -1,0 +1,128 @@
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
+import { Geometry } from 'three/examples/jsm/deprecated/Geometry';
+import { THREEJson } from './Types';
+import { Config, EditorConfig } from './Config';
+import { Exporter } from './Exporter';
+import { Loader } from './Loader';
+import { History, HistoryJson } from './History';
+import { Settings } from './Settings';
+import { StencilPlane } from './StencilPlane';
+import { EditorControls } from './controls/EditorControls';
+import { ViewCubeControls } from './controls/ViewCubeControls';
+import { Command } from './commands/Command';
+export declare type TransformControlsMode = 'translate' | 'rotate' | 'scale';
+export declare type Helper = THREE.CameraHelper | THREE.PointLightHelper | THREE.DirectionalLightHelper | THREE.SpotLightHelper | THREE.HemisphereLightHelper | THREE.SkeletonHelper;
+export interface EditorJson extends THREEJson {
+    camera: Record<string, unknown>;
+    scene: THREE.Scene;
+    history: HistoryJson;
+}
+export declare class Editor {
+    config: Config;
+    settings: Settings;
+    editorControls: EditorControls;
+    renderer: THREE.WebGLRenderer;
+    DEFAULT_CAMERA: THREE.Camera;
+    history: History;
+    exporter: Exporter;
+    loader: Loader;
+    camera: THREE.Camera;
+    scene: THREE.Scene;
+    sceneHelpers: THREE.Scene;
+    objects: THREE.Object3D[];
+    INITIAL_OBJECTS: THREE.Object3D[];
+    INITIAL_HELPERS: THREE.Object3D[];
+    geometries: {
+        [index: string]: Geometry | THREE.BufferGeometry;
+    };
+    materials: {
+        [index: string]: THREE.Material;
+    };
+    textures: {
+        [index: string]: THREE.Texture;
+    };
+    materialsRefCounter: Map<THREE.Material, number>;
+    animations: {
+        [index: string]: THREE.AnimationClip[];
+    };
+    mixer: THREE.AnimationMixer;
+    selected: THREE.Object3D | null;
+    hovered: THREE.Object3D | null;
+    helpers: {
+        [index: string]: Helper;
+    };
+    cameras: {
+        [index: string]: THREE.Camera;
+    };
+    viewportCamera: THREE.Camera;
+    orbitControls: OrbitControls;
+    viewCubeControls: ViewCubeControls;
+    gridHelper: THREE.GridHelper;
+    axesHelper: THREE.AxesHelper;
+    planeHelper: THREE.PlaneHelper;
+    stencilPlane: StencilPlane;
+    box: THREE.Box3;
+    selectionBox: THREE.BoxHelper;
+    transformControls: TransformControls;
+    raycaster: THREE.Raycaster;
+    mouse: THREE.Vector2;
+    contextMenu: {
+        open: boolean;
+        x: number | null;
+        y: number | null;
+    };
+    constructor();
+    setConfig(config: EditorConfig): void;
+    private editorCleared;
+    private objectSelected;
+    private objectFocused;
+    objectChanged(object: THREE.Object3D): void;
+    private objectRemoved;
+    private helperAdded;
+    private helperRemoved;
+    private viewportCameraChanged;
+    showGridChanged(showGrid: boolean): void;
+    render(): void;
+    setScene(scene: THREE.Scene): void;
+    changeTransformMode(mode: TransformControlsMode): void;
+    addObject(object: THREE.Object3D, parent?: THREE.Object3D, index?: number): void;
+    addObjectAsHelper(object: THREE.Object3D): void;
+    moveObject(object: THREE.Object3D, parent?: THREE.Object3D, before?: THREE.Object3D): void;
+    nameObject(object: THREE.Object3D, name: string): void;
+    removeObject(object: THREE.Object3D): void;
+    addGeometry(geometry: Geometry | THREE.BufferGeometry): void;
+    setGeometryName(geometry: Geometry | THREE.BufferGeometry, name: string): void;
+    addMaterial(material: THREE.Material | THREE.Material[]): void;
+    addMaterialToRefCounter(material: THREE.Material): void;
+    removeMaterial(material: THREE.Material | THREE.Material[]): void;
+    removeMaterialFromRefCounter(material: THREE.Material): void;
+    getMaterialById(id: number): THREE.Material | undefined;
+    setMaterialName(material: THREE.Material, name: string): void;
+    addTexture(texture: THREE.Texture): void;
+    addAnimation(object: THREE.Object3D, animations: THREE.AnimationClip[]): void;
+    addCamera(camera: THREE.Camera): void;
+    removeCamera(camera: THREE.Camera): void;
+    addHelper(object: THREE.Object3D): void;
+    removeHelper(object: THREE.Object3D): void;
+    updateGridHelper(gridHelper: THREE.GridHelper): void;
+    updateAxesHelper(axesHelper: THREE.AxesHelper): void;
+    updatePlaneHelper(planeHelper: THREE.PlaneHelper): void;
+    clip(enable?: boolean): void;
+    setDefaultCamera(): void;
+    setViewportCamera(uuid: string): void;
+    select(object: THREE.Object3D | null): void;
+    selectById(id: number): void;
+    selectByUuid(uuid: string): void;
+    setHovered(object: THREE.Object3D | null): void;
+    focus(object: THREE.Object3D): void;
+    focusById(id: number): void;
+    clear(): void;
+    fromJSON(json: EditorJson): void;
+    toJSON(): EditorJson;
+    objectByUuid(uuid: string | undefined): THREE.Object3D | undefined;
+    execute(cmd: Command): void;
+    undo(): void;
+    redo(): void;
+}
