@@ -10,13 +10,14 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "building-editor": "^0.0.3",
     "eslint": "^7.27.0",
     "rollup": "^2.50.4",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "three": "^0.129.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"
